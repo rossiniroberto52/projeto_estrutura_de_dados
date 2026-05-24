@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #define TAM_HASH 31
 #define TAM_STR 32
@@ -50,7 +51,7 @@ int insereHash(user* tabela, char* username_digitado, char* senha_hash_digitada)
     int tentativas = 0; 
 
     
-    while(tabela[indice].status == 1){ 
+    while(tabela[indice].status != 0){ 
         if(strcmp(tabela[indice].username, username_digitado) == 0){
             return -1;
         }
@@ -74,7 +75,7 @@ int buscaHash(user* tabela, char* username_digitado, char* senha_hash_digitada){
     int salto = hash2(chave);
     int tentativas = 0;
 
-    while(tabela[indice].status == 1){ 
+    while(tabela[indice].status != 0){ 
         if(tabela[indice].status == 1 && strcmp(tabela[indice].username, username_digitado) == 0){
             if(strcmp(tabela[indice].crypt_password, senha_hash_digitada) == 0){
                 return 1;
@@ -93,5 +94,39 @@ int buscaHash(user* tabela, char* username_digitado, char* senha_hash_digitada){
 }
 
 int removeHash(user* tabela, char* username_digitado){
-    
+    int chave = valorString(username_digitado);
+    int indice = funcHash(chave);
+    int salto = hash2(chave);
+    int tentativas = 0;
+
+    while(tabela[indice].status == 1){ 
+        if(tabela[indice].status == 1 && strcmp(tabela[indice].username, username_digitado) == 0){
+            tabela[indice].status = 2;
+            return 1;
+        }
+        indice += salto;
+        indice = (indice % TAM_HASH);
+        tentativas++;
+
+        if(tentativas == TAM_HASH){
+            return 0; 
+        }
+    }
+    return 0;
+}
+
+void liberaHash(user* tabela){
+    free(tabela);
+}
+
+void imprimeHash(user* tabela){
+    for(int i=0; i<TAM_HASH;i++){
+        if(tabela[i].status == 0){
+            printf("[Indice: %d] - vazio\n", i);
+        }else if(tabela[i].status == 1){
+            printf("[Indice: %d] - Usuario: %s | Hash: %s\n", i, tabela[i].username, tabela[i].crypt_password);
+        }else if(tabela[i].status == 2){
+            printf("[Indice: %d] - Removido(lapide)\n", i);
+        }
+    }
 }
