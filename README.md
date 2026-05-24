@@ -1,5 +1,8 @@
 
 # Sistema de Autenticação - Tabela Hash em C
+
+## TIME: Rossini, Ruann, Tiago
+
 ## 1 - Descrição do Projeto
 Este projeto implementa um sistema de autenticação de usuários do zero em C. A arquitetura de dados baseia-se em uma Tabela Hash com Endereçamento Aberto e Duplo Hash para resolução de colisões. O sistema garante o isolamento de senhas em memória, não armazenando credenciais em texto limpo e operando sob o conceito de Lápides (Tombstones) para exclusão lógica de dados.
 ## 2 - Como Compilar e Executar
